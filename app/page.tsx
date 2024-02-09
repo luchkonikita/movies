@@ -48,14 +48,12 @@ async function getData() {
 export default async function Home() {
   const data = await getData();
 
-  data.results;
-
   return (
     <main className={styles.main}>
       <Container className={styles.container}>
         <Title order={1}>Movies Database</Title>
 
-        <Table>
+        <Table horizontalSpacing="sm" verticalSpacing="sm">
           <TableThead>
             <TableTr>
               <TableTh className={styles.titleColumn}>Title</TableTh>
@@ -66,6 +64,7 @@ export default async function Home() {
               </TableTh>
             </TableTr>
           </TableThead>
+
           <TableTbody>
             {data.results.map((item) => (
               <TableTr key={item.id}>
