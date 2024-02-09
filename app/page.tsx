@@ -1,95 +1,89 @@
-import Image from "next/image";
+import z from "zod";
+import {
+  Container,
+  Title,
+  Table,
+  TableThead,
+  TableTh,
+  TableTr,
+  TableTbody,
+  TableTd,
+  Text,
+} from "@mantine/core";
 import styles from "./page.module.css";
 
-export default function Home() {
+const discoverMoviesSchema = z.object({
+  results: z.array(
+    z.object({
+      id: z.number(),
+      title: z.string(),
+      release_date: z.string().optional(),
+      overview: z.string().optional(),
+      popularity: z.number().optional(),
+      poster_path: z
+        .string()
+        .nullable()
+        .optional()
+        .transform((val) =>
+          val
+            ? `https://image.tmdb.org/t/p/w260_and_h390_multi_faces${val}`
+            : undefined
+        ),
+    })
+  ),
+});
+
+async function getData() {
+  const res = await fetch(`https://api.themoviedb.org/3/discover/movie`, {
+    headers: {
+      Authorization: `Bearer ${process.env.TMDB_API_TOKEN}`,
+    },
+  });
+
+  const data = await res.json();
+
+  return discoverMoviesSchema.parse(data);
+}
+
+export default async function Home() {
+  const data = await getData();
+
+  data.results;
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+      <Container className={styles.container}>
+        <Title order={1}>Movies Database</Title>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+        <Table>
+          <TableThead>
+            <TableTr>
+              <TableTh className={styles.titleColumn}>Title</TableTh>
+              <TableTh className={styles.overviewColumn}>Overview</TableTh>
+              <TableTh className={styles.popularityColumn}>Popularity</TableTh>
+              <TableTh className={styles.releaseDateColumn}>
+                Release Date
+              </TableTh>
+            </TableTr>
+          </TableThead>
+          <TableTbody>
+            {data.results.map((item) => (
+              <TableTr key={item.id}>
+                <TableTd className={styles.titleColumn}>{item.title}</TableTd>
+                <TableTd className={styles.overviewColumn}>
+                  <Text lineClamp={2}>{item.overview}</Text>
+                </TableTd>
+                <TableTd className={styles.popularityColumn}>
+                  {item.popularity}
+                </TableTd>
+                <TableTd className={styles.releaseDateColumn}>
+                  {item.release_date}
+                </TableTd>
+              </TableTr>
+            ))}
+          </TableTbody>
+        </Table>
+      </Container>
     </main>
   );
 }
