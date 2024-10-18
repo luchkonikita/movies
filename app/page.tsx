@@ -22,12 +22,15 @@ const discoverMoviesSchema = z.object({
   ),
 });
 
-async function getData() {
-  const res = await fetch(`https://api.themoviedb.org/3/discover/movie`, {
-    headers: {
-      Authorization: `Bearer ${process.env.TMDB_API_TOKEN}`,
-    },
-  });
+const getData = async ({ page = 1 }) => {
+  const res = await fetch(
+    `https://api.themoviedb.org/3/discover/movie?page=${page}`,
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.TMDB_API_TOKEN}`,
+      },
+    }
+  );
 
   const data = await res.json();
 
@@ -36,14 +39,19 @@ async function getData() {
     releaseDate: item.release_date,
     posterPath: item.poster_path,
   }));
-}
+};
 
 const Home = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const movies = await getData();
+  const page =
+    searchParams.page && typeof searchParams.page === "string"
+      ? parseInt(searchParams.page, 10)
+      : 1;
+
+  const movies = await getData({ page });
 
   return (
     <main>
