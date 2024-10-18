@@ -1,16 +1,5 @@
 import z from "zod";
-import {
-  Container,
-  Title,
-  Table,
-  TableThead,
-  TableTh,
-  TableTr,
-  TableTbody,
-  TableTd,
-  Text,
-} from "@mantine/core";
-import styles from "./page.module.css";
+import MovieListItem from "@/src/components/MovieListItem";
 
 const discoverMoviesSchema = z.object({
   results: z.array(
@@ -42,47 +31,35 @@ async function getData() {
 
   const data = await res.json();
 
-  return discoverMoviesSchema.parse(data);
+  return discoverMoviesSchema.parse(data).results.map((item) => ({
+    ...item,
+    releaseDate: item.release_date,
+    posterPath: item.poster_path,
+  }));
 }
 
-export default async function Home() {
-  const data = await getData();
+const Home = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
+  const movies = await getData();
 
   return (
-    <main className={styles.main}>
-      <Container className={styles.container}>
-        <Title order={1}>Movies Database</Title>
+    <main>
+      <div className="w-192 mx-auto py-8 flex flex-col gap-8">
+        <h1 className="text-xl">Movies Database {searchParams.term}</h1>
 
-        <Table horizontalSpacing="sm" verticalSpacing="sm">
-          <TableThead>
-            <TableTr>
-              <TableTh className={styles.titleColumn}>Title</TableTh>
-              <TableTh className={styles.overviewColumn}>Overview</TableTh>
-              <TableTh className={styles.popularityColumn}>Popularity</TableTh>
-              <TableTh className={styles.releaseDateColumn}>
-                Release Date
-              </TableTh>
-            </TableTr>
-          </TableThead>
-
-          <TableTbody>
-            {data.results.map((item) => (
-              <TableTr key={item.id}>
-                <TableTd className={styles.titleColumn}>{item.title}</TableTd>
-                <TableTd className={styles.overviewColumn}>
-                  <Text lineClamp={2}>{item.overview}</Text>
-                </TableTd>
-                <TableTd className={styles.popularityColumn}>
-                  {item.popularity}
-                </TableTd>
-                <TableTd className={styles.releaseDateColumn}>
-                  {item.release_date}
-                </TableTd>
-              </TableTr>
-            ))}
-          </TableTbody>
-        </Table>
-      </Container>
+        <ul className="flex flex-col gap-6">
+          {movies.map((movie) => (
+            <li key={movie.id}>
+              <MovieListItem {...movie} />
+            </li>
+          ))}
+        </ul>
+      </div>
     </main>
   );
-}
+};
+
+export default Home;
