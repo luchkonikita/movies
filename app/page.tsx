@@ -47,7 +47,7 @@ const Home = async ({
 
   return (
     <main>
-      <div className="w-192 mx-auto py-8 flex flex-col gap-8">
+      <div className="max-w-192 mx-auto py-8 px-4 flex flex-col gap-8">
         <h1 className="text-xl">Movies Database {searchParams.term}</h1>
 
         <ul className="flex flex-col gap-6">
