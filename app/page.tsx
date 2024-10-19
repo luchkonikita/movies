@@ -67,7 +67,9 @@ const Home = async ({
     <main>
       <div className="max-w-192 mx-auto py-8 px-4 flex flex-col gap-8">
         <h1 className="text-xl">
-          <Link href="/">Movies Database {searchParams.term}</Link>
+          <Link href="/" className="hover:text-gray-400">
+            Movies Database {searchParams.term}
+          </Link>
         </h1>
 
         <ul className="flex flex-col gap-6">
@@ -82,7 +84,7 @@ const Home = async ({
           {page > 1 && (
             <Link
               href={`/?page=${page - 1}`}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 hover:text-gray-400"
             >
               <ChevronLeftIcon className="size-6" /> Previous
             </Link>
@@ -90,7 +92,7 @@ const Home = async ({
           {page < totalPages && (
             <Link
               href={`/?page=${page + 1}`}
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 hover:text-gray-400"
             >
               Next <ChevronRightIcon className="size-6" />
             </Link>
