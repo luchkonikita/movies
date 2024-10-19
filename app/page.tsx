@@ -1,7 +1,11 @@
 import z from "zod";
 import MovieListItem from "@/src/components/MovieListItem";
+import Link from "next/link";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
 
 const discoverMoviesSchema = z.object({
+  page: z.number(),
+  total_pages: z.number(),
   results: z.array(
     z.object({
       id: z.number(),
@@ -34,11 +38,17 @@ const getData = async ({ page = 1 }) => {
 
   const data = await res.json();
 
-  return discoverMoviesSchema.parse(data).results.map((item) => ({
-    ...item,
-    releaseDate: item.release_date,
-    posterPath: item.poster_path,
-  }));
+  const parsed = discoverMoviesSchema.parse(data);
+
+  return {
+    page: parsed.page,
+    totalPages: parsed.total_pages,
+    results: parsed.results.map((item) => ({
+      ...item,
+      releaseDate: item.release_date,
+      posterPath: item.poster_path,
+    })),
+  };
 };
 
 const Home = async ({
@@ -46,12 +56,12 @@ const Home = async ({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const page =
+  const pageParam =
     searchParams.page && typeof searchParams.page === "string"
       ? parseInt(searchParams.page, 10)
       : 1;
 
-  const movies = await getData({ page });
+  const { results, page, totalPages } = await getData({ page: pageParam });
 
   return (
     <main>
@@ -59,12 +69,31 @@ const Home = async ({
         <h1 className="text-xl">Movies Database {searchParams.term}</h1>
 
         <ul className="flex flex-col gap-6">
-          {movies.map((movie) => (
+          {results.map((movie) => (
             <li key={movie.id}>
               <MovieListItem {...movie} />
             </li>
           ))}
         </ul>
+
+        <nav className="flex items-center justify-center gap-12">
+          {page > 1 && (
+            <Link
+              href={`/?page=${page - 1}`}
+              className="flex items-center gap-2"
+            >
+              <ChevronLeftIcon className="size-6" /> Previous
+            </Link>
+          )}
+          {page < totalPages && (
+            <Link
+              href={`/?page=${page + 1}`}
+              className="flex items-center gap-2"
+            >
+              Next <ChevronRightIcon className="size-6" />
+            </Link>
+          )}
+        </nav>
       </div>
     </main>
   );

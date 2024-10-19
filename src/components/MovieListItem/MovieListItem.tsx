@@ -15,7 +15,13 @@ const MovieListItem = ({
 }: Props) => {
   return (
     <div className="flex gap-4">
-      <img src={posterPath} alt={`${title} Poster`} width={72} height={108} />
+      <img
+        src={posterPath}
+        alt={`${title} Poster`}
+        width={69}
+        height={104}
+        className="h-26 bg-gray-600"
+      />
 
       <div className="flex flex-col gap-2">
         <header className="text-lg">{title}</header>
