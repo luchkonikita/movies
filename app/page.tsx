@@ -66,7 +66,9 @@ const Home = async ({
   return (
     <main>
       <div className="max-w-192 mx-auto py-8 px-4 flex flex-col gap-8">
-        <h1 className="text-xl">Movies Database {searchParams.term}</h1>
+        <h1 className="text-xl">
+          <Link href="/">Movies Database {searchParams.term}</Link>
+        </h1>
 
         <ul className="flex flex-col gap-6">
           {results.map((movie) => (
