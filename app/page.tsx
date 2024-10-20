@@ -12,7 +12,7 @@ const discoverMoviesSchema = z.object({
       title: z.string(),
       release_date: z.string().optional(),
       overview: z.string().optional(),
-      popularity: z.number().optional(),
+      vote_average: z.number().optional(),
       poster_path: z
         .string()
         .nullable()
@@ -37,7 +37,6 @@ const getData = async ({ page = 1 }) => {
   );
 
   const data = await res.json();
-
   const parsed = discoverMoviesSchema.parse(data);
 
   return {
@@ -46,6 +45,7 @@ const getData = async ({ page = 1 }) => {
     results: parsed.results.map((item) => ({
       ...item,
       releaseDate: item.release_date,
+      voteAverage: item.vote_average,
       posterPath: item.poster_path,
     })),
   };
@@ -72,7 +72,7 @@ const Home = async ({
           </Link>
         </h1>
 
-        <ul className="flex flex-col gap-6">
+        <ul className="flex flex-col gap-8">
           {results.map((movie) => (
             <li key={movie.id}>
               <MovieListItem {...movie} />
