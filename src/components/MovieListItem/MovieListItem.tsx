@@ -1,7 +1,6 @@
 import Image from "next/image";
-import { format } from "date-fns";
-import { StarIcon } from "@heroicons/react/24/solid";
-import { StarIcon as StarIconOutline } from "@heroicons/react/24/outline";
+import Rating from "@/src/components/Rating";
+import formatDate from "@/src/services/formatDate";
 
 interface Props {
   title: string;
@@ -34,9 +33,7 @@ const MovieListItem = ({
         <header className="text-lg">{title}</header>
 
         <div className="flex items-center gap-4">
-          {typeof voteAverage === "number" && (
-            <span>{formatRating(voteAverage)}</span>
-          )}
+          {voteAverage !== undefined && <Rating rating={voteAverage} />}
           {releaseDate && (
             <p className="w-24 flex-shrink-0 text-right text-sm">
               {formatDate(releaseDate)}
@@ -49,26 +46,5 @@ const MovieListItem = ({
     </div>
   </div>
 );
-
-const formatDate = (dateString: string) =>
-  format(new Date(dateString), "d MMM yyyy");
-
-const formatRating = (rating: number) => {
-  const stars = Math.round(rating / 2);
-
-  return (
-    <div
-      className="flex items-center gap-1"
-      title={`Average rating: ${rating / 2}`}
-    >
-      {[...new Array(stars)].map((_, index) => (
-        <StarIcon key={index} className="text-yellow-600 size-3" />
-      ))}
-      {[...new Array(5 - stars)].map((_, index) => (
-        <StarIconOutline key={index} className="text-white size-3" />
-      ))}
-    </div>
-  );
-};
 
 export default MovieListItem;

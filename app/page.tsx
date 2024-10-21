@@ -26,6 +26,22 @@ const discoverMoviesSchema = z.object({
   ),
 });
 
+const searchParamsSchema = z.object({
+  page: z
+    .string()
+    .optional()
+    .transform((val) => {
+      if (typeof val !== "string") return 1;
+
+      const parsed = parseInt(val);
+
+      if (Number.isNaN(parsed)) return 1;
+      if (parsed < 1) return 1;
+
+      return parsed;
+    }),
+});
+
 const getData = async ({ page = 1 }) => {
   const res = await fetch(
     `https://api.themoviedb.org/3/discover/movie?page=${page}`,
@@ -56,19 +72,18 @@ const Home = async ({
 }: {
   searchParams: { [key: string]: string | string[] | undefined };
 }) => {
-  const pageParam =
-    searchParams.page && typeof searchParams.page === "string"
-      ? parseInt(searchParams.page, 10)
-      : 1;
+  const parsedParams = searchParamsSchema.parse(searchParams);
 
-  const { results, page, totalPages } = await getData({ page: pageParam });
+  const { results, page, totalPages } = await getData({
+    page: parsedParams.page,
+  });
 
   return (
     <main>
       <div className="max-w-192 mx-auto py-8 px-4 flex flex-col gap-8">
         <h1 className="text-xl">
           <Link href="/" className="hover:text-gray-400">
-            Movies Database {searchParams.term}
+            Movies Database
           </Link>
         </h1>
 
