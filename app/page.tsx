@@ -49,6 +49,9 @@ const getData = async ({ page = 1 }) => {
       headers: {
         Authorization: `Bearer ${process.env.TMDB_API_TOKEN}`,
       },
+      next: {
+        revalidate: 60 * 60 * 60, // One hour
+      },
     }
   );
 
