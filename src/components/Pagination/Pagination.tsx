@@ -49,7 +49,7 @@ const Pagination = memo(
       cursor++;
     }
 
-    if (cursor < total - 1) {
+    if (cursor <= total - 1) {
       pages = [...pages, "..."];
     }
 
