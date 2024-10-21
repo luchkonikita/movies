@@ -11,6 +11,8 @@ const schema = z.object({
 
       if (Number.isNaN(parsed)) return 1;
       if (parsed < 1) return 1;
+      /** NOTE: The API only allows 500 as a max value. */
+      if (parsed > 500) return 500;
 
       return parsed;
     }),

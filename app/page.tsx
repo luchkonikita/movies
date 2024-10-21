@@ -1,9 +1,8 @@
-import z from "zod";
-import MovieListItem from "@/src/components/MovieListItem";
 import Link from "next/link";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/16/solid";
+import MovieListItem from "@/src/components/MovieListItem";
 import loadMovies from "@/src/services/loadMovies";
 import parseMoviesRequest from "@/src/services/parseMoviesRequest";
+import Pagination from "@/src/components/Pagination";
 
 interface Props {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -33,24 +32,11 @@ const Home = async ({ searchParams }: Props) => {
           ))}
         </ul>
 
-        <nav className="flex items-center justify-center gap-12">
-          {page > 1 && (
-            <Link
-              href={`/?page=${page - 1}`}
-              className="flex items-center gap-2 hover:text-gray-400"
-            >
-              <ChevronLeftIcon className="size-6" /> Previous
-            </Link>
-          )}
-          {page < totalPages && (
-            <Link
-              href={`/?page=${page + 1}`}
-              className="flex items-center gap-2 hover:text-gray-400"
-            >
-              Next <ChevronRightIcon className="size-6" />
-            </Link>
-          )}
-        </nav>
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          href={(num) => `/?page=${num}`}
+        />
       </div>
     </main>
   );
