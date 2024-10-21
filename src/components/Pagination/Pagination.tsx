@@ -84,4 +84,6 @@ const Pagination = memo(
   }
 );
 
+Pagination.displayName = "Pagination";
+
 export default Pagination;
