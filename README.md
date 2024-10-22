@@ -17,5 +17,6 @@ This is a UI build on top of [TMDB](https://www.themoviedb.org/) API using React
 
 - [ ] Add more tests.
 - [ ] Handle errors and send proper responses.
-- [ ] Add metadata.
+- [*] Add metadata.
 - [ ] Implement some filtering.
+- [ ] Add favicon.
