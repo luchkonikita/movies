@@ -12,3 +12,10 @@ This is a UI build on top of [TMDB](https://www.themoviedb.org/) API using React
 
 - [Preview on Vercel](https://movies-eight-olive.vercel.app/)
 - [TMDB API Reference](https://developer.themoviedb.org/reference)
+
+## TODO
+
+- [ ] Add more tests.
+- [ ] Handle errors and send proper responses.
+- [ ] Add metadata.
+- [ ] Implement some filtering.
