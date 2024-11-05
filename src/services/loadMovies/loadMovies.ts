@@ -15,9 +15,7 @@ const schema = z.object({
         .nullable()
         .optional()
         .transform((val) =>
-          val
-            ? `https://image.tmdb.org/t/p/w260_and_h390_multi_faces${val}`
-            : undefined
+          val ? `https://image.tmdb.org/t/p/w92${val}` : undefined
         ),
     })
   ),
