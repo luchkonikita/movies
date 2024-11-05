@@ -28,7 +28,7 @@ const MovieListItem = ({
       />
     )}
 
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 grow">
       <div className="flex justify-between items-center">
         <header className="text-lg">{title}</header>
 
@@ -42,7 +42,9 @@ const MovieListItem = ({
         </div>
       </div>
 
-      <p className="text-sm line-clamp-3">{overview}</p>
+      <p className="text-sm line-clamp-3">
+        {overview || <i>No Overview Provided</i>}
+      </p>
     </div>
   </div>
 );

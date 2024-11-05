@@ -1,6 +1,7 @@
 import z from "zod";
 
 const schema = z.object({
+  term: z.string().optional(),
   page: z
     .string()
     .optional()

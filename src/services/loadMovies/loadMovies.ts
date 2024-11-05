@@ -23,18 +23,31 @@ const schema = z.object({
   ),
 });
 
-const loadMovies = async ({ page = 1 }) => {
-  const res = await fetch(
-    `https://api.themoviedb.org/3/discover/movie?page=${page}`,
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.TMDB_API_TOKEN}`,
-      },
-      next: {
-        revalidate: 60 * 60 * 60, // One hour
-      },
-    }
-  );
+const loadMovies = async ({
+  page = 1,
+  term,
+}: {
+  page: number;
+  term?: string;
+}) => {
+  let url = "https://api.themoviedb.org/3/";
+  const params = new URLSearchParams({ page: page.toString() });
+
+  if (term) {
+    params.append("query", term);
+    url += `search/movie?${params.toString()}`;
+  } else {
+    url += `discover/movie?${params.toString()}`;
+  }
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${process.env.TMDB_API_TOKEN}`,
+    },
+    next: {
+      revalidate: 60 * 60 * 60, // One hour
+    },
+  });
 
   const data = await res.json();
   const parsed = schema.parse(data);

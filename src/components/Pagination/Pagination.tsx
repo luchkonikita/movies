@@ -69,7 +69,7 @@ const Pagination = memo(
             }
 
             return page === currentPage ? (
-              <li key={page} className="opacity-60 cursor-not-allowed">
+              <li key={page} className="opacity-50 cursor-not-allowed">
                 {page}
               </li>
             ) : (

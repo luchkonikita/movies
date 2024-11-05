@@ -20,3 +20,5 @@ This is a UI build on top of [TMDB](https://www.themoviedb.org/) API using React
 - [*] Add metadata.
 - [ ] Implement some filtering.
 - [ ] Add favicon.
+- [ ] Handle the lack of cover image or description.
+- [ ] Add TMDB attribution.
