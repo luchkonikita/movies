@@ -29,7 +29,7 @@ const MovieListItem = ({
     )}
 
     <div className="flex flex-col gap-2 grow">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col justify-between gap-1 sm:items-center sm:flex-row">
         <header className="text-lg">{title}</header>
 
         <div className="flex items-center gap-4">
