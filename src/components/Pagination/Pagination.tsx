@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { memo } from "react";
+import { memo, PropsWithChildren } from "react";
 
 interface Props {
   currentPage: number;
@@ -60,7 +60,7 @@ const Pagination = memo(
     return (
       <nav>
         <ul
-          className="flex items-center justify-center gap-4"
+          className="flex items-center justify-center gap-2"
           aria-label="pagination"
         >
           {pages.map((page, index) => {
@@ -70,11 +70,18 @@ const Pagination = memo(
 
             return page === currentPage ? (
               <li key={page} className="opacity-50 cursor-not-allowed">
-                {page}
+                <span className="inline-block px-3 py-1 rounded-md">
+                  {page}
+                </span>
               </li>
             ) : (
               <li key={page}>
-                <Link href={href(page)}>{page}</Link>
+                <Link
+                  href={href(page)}
+                  className="inline-block px-3 py-1 rounded-md hover:bg-black focus:bg-black"
+                >
+                  {page}
+                </Link>
               </li>
             );
           })}
