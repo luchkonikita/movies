@@ -1,11 +1,8 @@
 import type { PropsWithChildren } from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Movies Database",
@@ -15,7 +12,7 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: PropsWithChildren) => (
   <html lang="en">
     <head></head>
-    <body className={inter.className}>
+    <body>
       {children}
       <SpeedInsights />
     </body>
